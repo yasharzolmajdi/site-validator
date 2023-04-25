@@ -1,0 +1,10 @@
+{
+  "workers": 6,
+  "successStatusCodes": ["2**", "403"],
+  "ignoreUrls": [
+    "https://www.linkedin.com*",
+    "mailto:*",
+    "https://au.linkedin.com*",
+    "about:blank#*"
+  ]
+}

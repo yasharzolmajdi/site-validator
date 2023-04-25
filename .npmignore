@@ -1,0 +1,7 @@
+# Ignore everything by default
+**
+
+# Include files and folders in npmjs
+!/build/**
+!/package.json
+!/yarn.lock
