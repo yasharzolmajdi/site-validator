@@ -15,8 +15,19 @@ export interface Config {
 export default async function getConfig() {
   const args = process.argv.slice(3);
 
-  const configData = await fs.readFile("./validationConfig.json", "utf-8");
-  const config = JSON.parse(configData) as Config;
+  let config: Config = {
+    workers: 6,
+    successStatusCodes: ["2**"],
+    ignoreUrls: [],
+  };
+
+  try {
+    const configData = await fs.readFile("./validationConfig.json", "utf-8");
+    config = {
+      ...config,
+      ...JSON.parse(configData),
+    };
+  } catch {}
 
   for (let index = 0; index < args.length; index += 2) {
     const key = args[index] as keyof typeof ARGS;
