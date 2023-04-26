@@ -1,0 +1,40 @@
+##### This file is generated automatically. DO NOT EDIT #####
+name: Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Site to validate"
+        type: string
+        required: true
+      success_status_codes:
+        description: "Success status codes"
+        type: string
+        default: "2**,403"
+        required: true
+      ignore_Urls:
+        description: "Ignore Urls"
+        type: string
+        required: false
+      workers:
+        description: "Workers"
+        type: choice
+        options:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+        default: "6"
+        required: false
+jobs:
+  validate-links:
+    name: Validate links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: yarn global add @iconic21/site-validator
+      - name: Run check
+        run: validate-links ${{ github.event.inputs.url }} --workers ${{ github.event.inputs.workers }} --successStatusCodes ${{ github.event.inputs.success_status_codes }} --ignoreUrls ${{ github.event.inputs.ignore_Urls }}
