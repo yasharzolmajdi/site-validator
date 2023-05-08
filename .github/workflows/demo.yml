@@ -34,7 +34,10 @@ jobs:
     name: Validate links
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Install dependencies
-        run: yarn global add @iconic21/site-validator
+        run: yarn install
+      - name: Build
+        run: yarn build
       - name: Run check
-        run: validate-links ${{ github.event.inputs.url }} --workers ${{ github.event.inputs.workers }} --successStatusCodes ${{ github.event.inputs.success_status_codes }} --ignoreUrls ${{ github.event.inputs.ignore_Urls }}
+        run: node build/index.js ${{ github.event.inputs.url }} --workers ${{ github.event.inputs.workers }} --successStatusCodes ${{ github.event.inputs.success_status_codes }} --ignoreUrls ${{ github.event.inputs.ignore_Urls }}
