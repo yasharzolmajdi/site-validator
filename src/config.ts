@@ -1,21 +1,25 @@
 import fs from "fs/promises";
 
-const ARGS = {
+const ARGS: Record<string, string> = {
+  "--url": "url",
   "--workers": "workers",
   "--successStatusCodes": "successStatusCodes",
   "--ignoreUrls": "ignoreUrls",
 };
 
 export interface Config {
+  url: string;
   workers: number;
   successStatusCodes: string[];
   ignoreUrls: string[];
 }
 
 export default async function getConfig() {
-  const args = process.argv.slice(3);
+  const jumpIndex = process.argv.findIndex((item) => !!ARGS[item]);
+  const args = process.argv.slice(jumpIndex);
 
   let config: Config = {
+    url: "",
     workers: 6,
     successStatusCodes: ["2**"],
     ignoreUrls: [],
@@ -34,6 +38,9 @@ export default async function getConfig() {
     const value = args[index + 1];
     if (value) {
       switch (key) {
+        case "--url":
+          config.url = value;
+          break;
         case "--workers":
           config.workers = parseInt(value);
           break;

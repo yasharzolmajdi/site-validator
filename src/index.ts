@@ -108,13 +108,13 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
 }
 
 (async () => {
-  const args = process.argv.slice(2);
+  const config = await getConfig();
 
   const mainLog = debug("Main");
   const mainLogError = debug("Main:error");
   mainLogError.log = console.error.bind(console);
 
-  const config = await getConfig();
+  
 
   const workerLogs = new Array(config.workers)
     .fill(null)
@@ -125,11 +125,10 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
 
   if (isMainThread) {
     new Promise<PromiseReturn>(async (resolve, reject) => {
-      const url = args[0];
-      mainLog("Fetching sitemap from", url);
+      mainLog("Fetching sitemap from", config.url);
 
       const urls = await getSiteMapUrls(
-        new URL("/sitemap.xml", url).toString()
+        new URL("/sitemap.xml", config.url).toString()
       );
       mainLog("Found", urls.length, "Pages to validate");
 
@@ -150,7 +149,7 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
             index,
             urls: element,
             config,
-            siteUrl: url,
+            siteUrl: config.url,
           },
         });
 
