@@ -23,6 +23,8 @@ interface WorkerData {
 interface UrlError {
   page: string;
   url: string;
+  status?: number;
+  reason?: string;
 }
 
 interface PromiseReturn {
@@ -114,8 +116,6 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
   const mainLogError = debug("Main:error");
   mainLogError.log = console.error.bind(console);
 
-  
-
   const workerLogs = new Array(config.workers)
     .fill(null)
     .map((_, index) => debug(`Worker:${index}`));
@@ -181,7 +181,10 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
             "Failed to validate",
             error.url,
             "on page",
-            error.page
+            error.page,
+            "Status",
+            error.status ?? "500",
+            error.reason
           );
           content.push(`${error.url},${error.page}`);
         }
@@ -233,7 +236,12 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
             },
           });
           if (!request.ok && request.status !== 403) {
-            errors.push({ page, url });
+            errors.push({
+              page,
+              url,
+              status: request.status,
+              reason: request.statusText,
+            });
             return;
           }
 
