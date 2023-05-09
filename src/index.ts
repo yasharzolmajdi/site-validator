@@ -66,6 +66,7 @@ async function request(url: string, attempts: number = 1): Promise<Response> {
         throw new Error(error);
       }
 
+      await delay(5000);
       return await request(url, attempts + 1);
     }
 
@@ -245,8 +246,6 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
           return;
         }
 
-        await delay(500);
-
         broadcastChannel.postMessage(["validating", url]);
 
         checkedUrls.add(url);
@@ -293,8 +292,6 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
           "Checking",
           url,
         ]);
-
-        await delay(1000);
         await validate(url, url, true);
       }
       broadcastChannel.postMessage([
