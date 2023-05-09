@@ -51,6 +51,28 @@ interface SitemapData {
   };
 }
 
+async function request(url: string, attempts: number = 1): Promise<Response> {
+  try {
+    return await fetch(url, {
+      redirect: "follow",
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36",
+      },
+    });
+  } catch (error: any) {
+    if (error.message === "fetch failed") {
+      if (attempts === 3) {
+        throw new Error(error);
+      }
+
+      return await request(url, attempts + 1);
+    }
+
+    throw new Error(error);
+  }
+}
+
 async function getSiteMapUrls(url: string, urls: string[] = []) {
   const request = await fetch(url);
   const data = await request.text();
@@ -229,26 +251,21 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
 
         checkedUrls.add(url);
         try {
-          const request = await fetch(url, {
-            redirect: "follow",
-            headers: {
-              "User-Agent":
-                "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36",
-            },
-          });
-          if (!request.ok && request.status !== 403) {
+          const requestResult = await request(url);
+
+          if (!requestResult.ok && requestResult.status !== 403) {
             errors.push({
               page,
               url,
-              status: request.status,
-              reason: request.statusText,
+              status: requestResult.status,
+              reason: requestResult.statusText,
             });
             return;
           }
 
           pass++;
           if (checkPage) {
-            const data = await request.text();
+            const data = await requestResult.text();
             const dom = new JSDOM(data);
             const links = dom.window.document.querySelectorAll("a");
             for (let index = 0; index < links.length; index++) {
