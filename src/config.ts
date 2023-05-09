@@ -20,7 +20,7 @@ export default async function getConfig() {
 
   let config: Config = {
     url: "",
-    workers: 1,
+    workers: 6,
     successStatusCodes: ["2**"],
     ignoreUrls: [],
   };
