@@ -1,6 +1,6 @@
 {
   "name": "@iconic21/site-validator",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "build/index.js",
   "author": "Yashar Zolmajdi <yashar.zolmajdi@gmail.com>",
   "license": "MIT",
