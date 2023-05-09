@@ -13,6 +13,8 @@ import { JSDOM } from "jsdom";
 import fs from "fs/promises";
 import getConfig, { Config } from "./config";
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 interface WorkerData {
   index: number;
   urls: string[];
@@ -256,6 +258,8 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
           "Checking",
           url,
         ]);
+
+        await delay(1000);
         await validate(url, url, true);
       }
       broadcastChannel.postMessage([
