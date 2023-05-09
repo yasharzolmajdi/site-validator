@@ -1,6 +1,6 @@
 {
   "name": "@iconic21/site-validator",
-  "version": "0.5.10",
+  "version": "0.6.0",
   "main": "build/index.js",
   "author": "Yashar Zolmajdi <yashar.zolmajdi@gmail.com>",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "start": "npm run build && node build/index.js"
   },
   "bin": {
-    "validate-links": "build/index.js"
+    "validate-links": "build/linkValidator/index.js"
   },
   "repository": {
     "type": "git",
