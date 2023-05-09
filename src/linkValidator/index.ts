@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { isMainThread } from "node:worker_threads";
 
 import getConfig from "../helpers/getConfig";
