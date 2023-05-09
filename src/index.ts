@@ -175,6 +175,22 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
       }
     }).then(async (data: PromiseReturn) => {
       if (data.errors.length > 0) {
+        const content: string[] = ["url,page"];
+        for (let index = 0; index < data.errors.length; index++) {
+          const error = data.errors[index];
+          mainLogError(
+            `[${index + ``}/${data.errors.length}]`,
+            "Failed to validate",
+            error.url,
+            "on page",
+            error.page,
+            "Status",
+            error.status ?? "500",
+            error.reason
+          );
+          content.push(`${error.url},${error.page}`);
+        }
+
         process.exit(1);
       }
 
@@ -206,6 +222,8 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
         ) {
           return;
         }
+
+        await delay(500);
 
         broadcastChannel.postMessage(["validating", url]);
 
