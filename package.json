@@ -1,6 +1,6 @@
 {
   "name": "@iconic21/site-validator",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "main": "build/index.js",
   "author": "Yashar Zolmajdi <yashar.zolmajdi@gmail.com>",
   "license": "MIT",
@@ -8,10 +8,12 @@
     "debug": "^4.3.4",
     "dotenv": "^16.0.3",
     "fast-xml-parser": "^4.2.0",
+    "html-validator": "^6.0.1",
     "jsdom": "^21.1.1"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
+    "@types/html-validator": "^5.0.3",
     "@types/jsdom": "^21.1.1",
     "@types/node": "^18.15.11",
     "rimraf": "^5.0.0",
@@ -23,7 +25,8 @@
     "start": "npm run build && node build/index.js"
   },
   "bin": {
-    "validate-links": "build/linkValidator/index.js"
+    "validate-links": "build/linkValidator/index.js",
+    "validate-html": "build/htmlValidator/index.js"
   },
   "repository": {
     "type": "git",
