@@ -261,7 +261,8 @@ function checkIfIgnored(url: string, ignoreList: string[]) {
               }
             }
           }
-        } catch {
+        } catch (e) {
+          broadcastChannel.postMessage(["Exception", url, e]);
           errors.push({ page, url });
           return;
         }
