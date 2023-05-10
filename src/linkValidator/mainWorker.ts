@@ -77,16 +77,7 @@ export default (
       const content: string[] = ["url,page"];
       for (let index = 0; index < data.errors.length; index++) {
         const error = data.errors[index];
-        errorLog(
-          `[${index + 1 + ``}/${data.errors.length}]`,
-          "Failed to validate",
-          error.url,
-          "on page",
-          error.page,
-          "Status",
-          error.status ?? "500",
-          error.reason
-        );
+        errorLog(`[${index + 1 + ``}/${data.errors.length}]: %O`, error);
         content.push(`${error.url},${error.page}`);
       }
     }
@@ -96,7 +87,7 @@ export default (
       data.passed + data.errors.length,
       ", passed:",
       data.passed,
-      ', failed:',
+      ", failed:",
       data.errors.length
     );
     process.exit(data.errors.length > 0 ? 1 : 0);

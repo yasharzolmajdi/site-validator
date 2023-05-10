@@ -34,7 +34,9 @@ async function htmlValidator() {
         pageErrors.length,
         pageErrors.length === 1 ? "error found" : "errors found"
       );
-      errors[url] = pageErrors;
+      if (pageErrors.length) {
+        errors[url] = pageErrors;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -42,6 +44,7 @@ async function htmlValidator() {
 
   const errorList = Object.entries(errors);
 
+  log("=================================================================");
   log(
     "All pages validated,",
     errorList.length,
@@ -49,6 +52,7 @@ async function htmlValidator() {
   );
 
   errorList.forEach(([url, pageErrors], index) => {
+    log("=================================================================");
     log(
       `[${index + 1}/${errorList.length}]`,
       url,
