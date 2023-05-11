@@ -13,7 +13,9 @@ async function htmlValidator() {
   log("Fetching sitemap from", config.url);
 
   const urls = await getPagesFromSiteMap(
-    new URL("/sitemap.xml", config.url).toString()
+    new URL("/sitemap.xml", config.url).toString(),
+    undefined,
+    config
   );
   log("Found", urls.length, "Pages to validate");
 

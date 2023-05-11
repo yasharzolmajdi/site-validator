@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { Config } from "../helpers/getConfig";
 
 interface SitemapData {
   sitemapindex?: {
@@ -19,9 +20,13 @@ interface SitemapData {
 
 export default async function getPagesFromSiteMap(
   url: string,
-  urls: string[] = []
+  urls: string[] = [],
+  config: Config
 ) {
-  const request = await fetch(url);
+  const Url = new URL(url);
+  Url.host = new URL(config.url).host;
+
+  const request = await fetch(Url.toString());
   const data = await request.text();
   const parser = new XMLParser();
   const parsedSitemap = parser.parse(data) as SitemapData;
@@ -37,15 +42,20 @@ export default async function getPagesFromSiteMap(
         index++
       ) {
         const element = parsedSitemap.sitemapindex.sitemap[index];
-        otherUrls = await getPagesFromSiteMap(element.loc, otherUrls);
+        otherUrls = await getPagesFromSiteMap(element.loc, otherUrls, config);
       }
     } else {
       otherUrls = await getPagesFromSiteMap(
         parsedSitemap.sitemapindex.sitemap.loc,
-        otherUrls
+        otherUrls,
+        config
       );
     }
   }
 
-  return otherUrls;
+  return otherUrls.map((item) => {
+    const itemUrl = new URL(item);
+    itemUrl.host = new URL(config.url).host;
+    return itemUrl.toString();
+  });
 }
